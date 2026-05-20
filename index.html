@@ -1,0 +1,151 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="RJ Shivangi Gupta | Elite Event Host & Professional Broadcaster. Bringing energy, elegance & engagement to every event." />
+    <title>RJ Shivangi Gupta | Elite Event Host & Professional Broadcaster</title>
+
+    <!-- Tailwind CSS CDN with Forms & Container-Queries plugins -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Google Fonts: Newsreader (headings) & Inter & Manrope & Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Inter:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;600;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+
+    <!-- Tailwind Custom Theme Configuration -->
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+              "primary": "#f2ca50",
+              "tertiary-fixed-dim": "#b4c5ff",
+              "on-error": "#690005",
+              "on-secondary-fixed": "#241a00",
+              "inverse-surface": "#e5e2e1",
+              "surface-container-lowest": "#0e0e0e",
+              "error": "#ffb4ab",
+              "on-surface-variant": "#d0c5af",
+              "primary-fixed-dim": "#e9c349",
+              "secondary": "#dac58d",
+              "on-background": "#e5e2e1",
+              "tertiary": "#bfcdff",
+              "on-tertiary-fixed-variant": "#27438a",
+              "surface-variant": "#353534",
+              "primary-fixed": "#ffe088",
+              "on-secondary-container": "#c8b37d",
+              "outline-variant": "#4d4635",
+              "surface-tint": "#e9c349",
+              "background": "#131313",
+              "tertiary-container": "#97b0ff",
+              "secondary-container": "#544519",
+              "on-primary": "#3c2f00",
+              "surface-bright": "#393939",
+              "surface-dim": "#131313",
+              "on-tertiary-container": "#254188",
+              "on-primary-fixed-variant": "#574500",
+              "secondary-fixed-dim": "#dac58d",
+              "on-secondary-fixed-variant": "#544519",
+              "on-primary-container": "#554300",
+              "surface-container": "#201f1f",
+              "on-error-container": "#ffdad6",
+              "inverse-on-surface": "#313030",
+              "secondary-fixed": "#f7e1a6",
+              "outline": "#99907c",
+              "on-surface": "#e5e2e1",
+              "on-tertiary": "#082b72",
+              "on-tertiary-fixed": "#00174b",
+              "surface-container-high": "#2a2a2a",
+              "error-container": "#93000a",
+              "tertiary-fixed": "#dbe1ff",
+              "on-secondary": "#3c2f05",
+              "primary-container": "#d4af37",
+              "surface-container-highest": "#353534",
+              "surface-container-low": "#1c1b1b",
+              "on-primary-fixed": "#241a00",
+              "surface": "#131313",
+              "inverse-primary": "#735c00"
+            },
+            "borderRadius": {
+              "DEFAULT": "0.25rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+            "fontFamily": {
+              "headline": ["Newsreader", "serif"],
+              "body": ["Manrope", "sans-serif"],
+              "label": ["Manrope", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Custom Micro-Styles for both layout systems -->
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-header {
+        background: rgba(19, 19, 19, 0.7);
+        backdrop-filter: blur(12px);
+      }
+      .editorial-text-overlap {
+        text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      }
+      body {
+        background-color: #131313;
+        color: #e5e2e1;
+        scroll-behavior: smooth;
+        min-height: max(884px, 100dvh);
+        overflow-x: hidden;
+      }
+      
+      /* Theme 1 - Classic Marquee */
+      @keyframes marquee {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+      .animate-marquee {
+        display: flex;
+        width: 200%;
+        animation: marquee 30s linear infinite;
+      }
+
+      /* Theme 2 - Velvet Utilities */
+      .font-serif {
+        font-family: 'Newsreader', serif;
+      }
+      .premium-shadow {
+        box-shadow: 0px 20px 40px rgba(212, 175, 55, 0.08);
+      }
+      .glass-panel {
+        background: rgba(53, 53, 53, 0.4);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      .perspective-hero-overlay {
+        background: linear-gradient(to top, #131313 0%, transparent 100%);
+      }
+      .gold-gradient-bg {
+        background: linear-gradient(45deg, #f2ca50, #d4af37);
+      }
+
+      /* Theme Toggle Banner styling */
+      .designer-toast {
+        animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      @keyframes slideInRight {
+        from { transform: translateX(100%) translateY(-50%); opacity: 0; }
+        to { transform: translateX(0) translateY(-50%); opacity: 1; }
+      }
+    </style>
+  </head>
+  <body class="bg-[#131313] text-on-surface selection:bg-primary selection:text-on-primary">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+📸 Local Image Setup Instructions for RJ Shivangi Gupta Portfolio
+===================================================================
+
+Drop your personal images here in this folder (`src/assets/`).
+
+How to use them in your React code (src/App.jsx):
+
+1. Drop your images here (for example: "profile_avatar.jpg").
+2. Open src/App.jsx.
+3. Add an import statement at the top:
+   import avatarImage from './assets/profile_avatar.jpg';
+4. Use it in the Image tag:
+   <img src={avatarImage} alt="RJ Shivangi Gupta Portrait" />
+
+===================================================================
+Vite handles bundling and compressing these files automatically on build!
