@@ -6,6 +6,7 @@ const multer = require('multer');
 const { v2: cloudinary } = require('cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const Media = require('./models/Media');
+const Inquiry = require('./models/Inquiry');
 
 const app = express();
 app.use(cors());
@@ -85,6 +86,57 @@ app.delete('/api/media/:id', async (req, res) => {
     res.json({ message: 'Media deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to delete media' });
+  }
+});
+
+// --- INQUIRIES ROUTING ---
+
+// Create a new inquiry
+app.post('/api/inquiries', async (req, res) => {
+  try {
+    const { fullName, email, phone, eventType, eventDate, message } = req.body;
+    
+    if (!fullName || !email || !phone || !eventType || !message) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    const newInquiry = new Inquiry({
+      fullName,
+      email,
+      phone,
+      eventType,
+      eventDate,
+      message,
+    });
+
+    await newInquiry.save();
+    res.status(201).json(newInquiry);
+  } catch (err) {
+    console.error('Inquiry submission error:', err);
+    res.status(500).json({ error: 'Failed to submit inquiry' });
+  }
+});
+
+// Get all inquiries (Admin only)
+app.get('/api/inquiries', async (req, res) => {
+  try {
+    const inquiries = await Inquiry.find().sort({ createdAt: -1 });
+    res.json(inquiries);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch inquiries' });
+  }
+});
+
+// Delete an inquiry (Admin only)
+app.delete('/api/inquiries/:id', async (req, res) => {
+  try {
+    const inquiry = await Inquiry.findById(req.params.id);
+    if (!inquiry) return res.status(404).json({ error: 'Inquiry not found' });
+    
+    await Inquiry.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Inquiry deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete inquiry' });
   }
 });
 

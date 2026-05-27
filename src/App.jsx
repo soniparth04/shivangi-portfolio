@@ -13,6 +13,7 @@ function App() {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    phone: '',
     eventType: 'Wedding',
     eventDate: '',
     message: ''
@@ -94,24 +95,73 @@ function App() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setFormStatus({ sending: true, success: false });
 
-    setTimeout(() => {
-      setFormStatus({ sending: false, success: true });
-      setFormData({
-        fullName: '',
-        email: '',
-        eventType: 'Wedding',
-        eventDate: '',
-        message: ''
+    try {
+      const response = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
 
-      setTimeout(() => {
-        setFormStatus(prev => ({ ...prev, success: false }));
-      }, 6000);
-    }, 2000);
+      if (response.ok) {
+        setFormStatus({ sending: false, success: true });
+        
+        // Construct pre-filled email to RJ Shivangi
+        const subject = encodeURIComponent(`Booking Inquiry - ${formData.eventType}`);
+        const body = encodeURIComponent(
+          `Hi RJ Shivangi,\n\nI would like to inquire about booking you for an event.\n\n` +
+          `Details:\n` +
+          `- Name: ${formData.fullName}\n` +
+          `- Email: ${formData.email}\n` +
+          `- Mobile Number: ${formData.phone}\n` +
+          `- Event Type: ${formData.eventType}\n` +
+          `- Event Date: ${formData.eventDate || 'Not Specified'}\n\n` +
+          `Message:\n${formData.message}\n\n` +
+          `Please get back to me as soon as possible.\n\nBest regards,\n${formData.fullName}`
+        );
+        
+        // Open user's email client
+        window.location.href = `mailto:guptashivangi537@gmail.com?subject=${subject}&body=${body}`;
+
+        // Reset form
+        setFormData({
+          fullName: '',
+          email: '',
+          phone: '',
+          eventType: 'Wedding',
+          eventDate: '',
+          message: ''
+        });
+
+        setTimeout(() => {
+          setFormStatus(prev => ({ ...prev, success: false }));
+        }, 6000);
+      } else {
+        throw new Error('Server returned an error');
+      }
+    } catch (error) {
+      console.error('Failed to send inquiry to server:', error);
+      setFormStatus({ sending: false, success: true }); // Still treat as success because we fallback to mailto
+      
+      // Fallback: If backend is offline, still trigger mailto link so the email goes out!
+      const subject = encodeURIComponent(`Booking Inquiry - ${formData.eventType}`);
+      const body = encodeURIComponent(
+        `Hi RJ Shivangi,\n\nI would like to inquire about booking you for an event.\n\n` +
+        `Details:\n` +
+        `- Name: ${formData.fullName}\n` +
+        `- Email: ${formData.email}\n` +
+        `- Mobile Number: ${formData.phone}\n` +
+        `- Event Type: ${formData.eventType}\n` +
+        `- Event Date: ${formData.eventDate || 'Not Specified'}\n\n` +
+        `Message:\n${formData.message}\n`
+      );
+      window.location.href = `mailto:guptashivangi537@gmail.com?subject=${subject}&body=${body}`;
+    }
   };
 
   // Smooth scroll helper
@@ -616,18 +666,32 @@ function App() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Email Address</label>
+                      <label className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Mobile Number</label>
                       <input
-                        name="email"
-                        value={formData.email}
+                        name="phone"
+                        value={formData.phone}
                         onChange={handleFormChange}
                         required
                         disabled={formStatus.sending}
                         className="w-full bg-[#201f1f] border border-outline-variant/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl p-4 text-on-surface outline-none transition-all"
-                        placeholder="email@example.com"
-                        type="email"
+                        placeholder="Mobile Number"
+                        type="tel"
                       />
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Email Address</label>
+                    <input
+                      name="email"
+                      value={formData.email}
+                      onChange={handleFormChange}
+                      required
+                      disabled={formStatus.sending}
+                      className="w-full bg-[#201f1f] border border-outline-variant/10 focus:border-primary focus:ring-1 focus:ring-primary rounded-xl p-4 text-on-surface outline-none transition-all"
+                      placeholder="email@example.com"
+                      type="email"
+                    />
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-6">
