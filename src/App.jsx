@@ -1,4 +1,11 @@
 import { useState, useEffect } from 'react';
+import coverImage from './assets/cover.JPG';
+import sangetImage from './assets/sanget.JPG';
+import haldiImage from './assets/haldi.JPG';
+import kidsImage from './assets/kids.JPG';
+import corporateImage from './assets/corporate.JPG';
+import cultureImage from './assets/culture.PNG';
+import fashionImage from './assets/fashion.PNG';
 
 
 
@@ -27,6 +34,46 @@ function App() {
     { name: 'Services', href: '#services' },
     { name: 'Portfolio', href: '#portfolio' },
     { name: 'Contact', href: '#contact' }
+  ];
+
+  // Curated Hosting Experiences
+  const services = [
+    {
+      title: "Sangeet Night",
+      icon: "queue_music",
+      description: "Infusing rhythm, high energy, and infectious musical vibes into your grand pre-wedding celebration.",
+      bg: sangetImage,
+    },
+    {
+      title: "Haldi Carnival",
+      icon: "celebration",
+      description: "Creating a lively, color-filled carnival atmosphere full of laughter, love, and traditional warmth.",
+      bg: haldiImage,
+    },
+    {
+      title: "Kids Celebration",
+      icon: "child_care",
+      description: "Delightful, high-energy hosting filled with games, fun prompts, and vibrant joy for little ones.",
+      bg: kidsImage,
+    },
+    {
+      title: "Corporate Events",
+      icon: "business_center",
+      description: "Delivering brand messages and corporate gala proceedings with absolute professional charisma and poise.",
+      bg: corporateImage,
+    },
+    {
+      title: "Cultural Gigs",
+      icon: "theater_comedy",
+      description: "Captivating diverse audiences with rich storytelling, stage presence, and traditional hosting flair.",
+      bg: cultureImage,
+    },
+    {
+      title: "Fashion Fun",
+      icon: "diamond",
+      description: "Bringing high glamour, premium style commentary, and chic energy to red carpet runways and fashion launches.",
+      bg: fashionImage,
+    },
   ];
 
   // Interleaved Media Database (Photos & Videos)
@@ -110,7 +157,7 @@ function App() {
 
       if (response.ok) {
         setFormStatus({ sending: false, success: true });
-        
+
         // Construct pre-filled email to RJ Shivangi
         const subject = encodeURIComponent(`Booking Inquiry - ${formData.eventType}`);
         const body = encodeURIComponent(
@@ -124,7 +171,7 @@ function App() {
           `Message:\n${formData.message}\n\n` +
           `Please get back to me as soon as possible.\n\nBest regards,\n${formData.fullName}`
         );
-        
+
         // Open user's email client
         window.location.href = `mailto:guptashivangi537@gmail.com?subject=${subject}&body=${body}`;
 
@@ -147,7 +194,7 @@ function App() {
     } catch (error) {
       console.error('Failed to send inquiry to server:', error);
       setFormStatus({ sending: false, success: true }); // Still treat as success because we fallback to mailto
-      
+
       // Fallback: If backend is offline, still trigger mailto link so the email goes out!
       const subject = encodeURIComponent(`Booking Inquiry - ${formData.eventType}`);
       const body = encodeURIComponent(
@@ -271,12 +318,13 @@ function App() {
         {/* ========================================================= */}
         {/*                       HERO SECTION                        */}
         {/* ========================================================= */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden" id="home">
+        <section className="relative min-h-screen flex items-end justify-center overflow-hidden pb-24 md:pb-32" id="home">
           <div className="absolute inset-0 z-0">
             <img
               className="w-full h-full object-cover opacity-40 scale-105 animate-[pulse_10s_infinite_alternate]"
-              alt="Dramatic stage with golden spot lighting and atmospheric haze"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwrsDsiyZ6kblAXbx8VEZcVa-zY9GKj5HqAZHaHg1rNhI-BTCgi-O5Ydhuwj6dp-DUzgFGuajMRWnKWaK8ifPvR3WjK5mrEO5rxu3i24K704grnvHq_5AuInP8DbYGEm-CVRS-pPECo6xDGJ2RlyObIBGr5YOoEyeGdim6_wRDJ2e8_uU7TuN7mjxEwn9lPM3v0NoDzxDAa5F9Kr8kZDazQETUdTEFw9vjtJrdjmhiwu-gr4lZgH9vp47RU6lE6Xr2yTj-zEodBw70"
+              style={{ objectPosition: 'center 40%' }}
+              alt="RJ Shivangi Gupta hosting an elegant wedding event"
+              src={coverImage}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/20 to-transparent"></div>
           </div>
@@ -330,45 +378,45 @@ function App() {
         {/* ========================================================= */}
         <section className="py-24 md:py-32 bg-[#131313]" id="about">
           <div className="max-w-7xl mx-auto px-6 md:px-8">
-            <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+            <div className="grid grid-cols-12 gap-4 md:gap-16 items-start">
 
               {/* Profile portrait frame */}
-              <div className="relative group">
-                <div className="absolute -top-6 -left-6 w-24 md:w-32 h-24 md:h-32 border-t-2 border-l-2 border-primary/40 z-0"></div>
+              <div className="col-span-5 md:col-span-6 relative group">
+                <div className="absolute -top-3 -left-3 md:-top-6 md:-left-6 w-16 md:w-32 h-16 md:h-32 border-t-2 border-l-2 border-primary/40 z-0"></div>
                 <div className="overflow-hidden rounded-xl shadow-2xl relative z-10 aspect-[4/5]">
                   <img
-                    className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                     alt="Sophisticated portrait of professional host RJ Shivangi Gupta"
                     src={aboutImageUrl}
                   />
                 </div>
-                <div className="absolute -bottom-6 -right-6 w-24 md:w-32 h-24 md:h-32 border-b-2 border-r-2 border-primary/40 z-0"></div>
+                <div className="absolute -bottom-3 -right-3 md:-bottom-6 md:-right-6 w-16 md:w-32 h-16 md:h-32 border-b-2 border-r-2 border-primary/40 z-0"></div>
               </div>
 
-              <div className="flex flex-col gap-8 pt-8 md:pt-0">
+              <div className="col-span-7 md:col-span-6 flex flex-col gap-4 md:gap-8 pt-0 md:pt-0">
                 <div>
-                  <span className="text-primary font-bold tracking-widest uppercase text-sm mb-4 block">
+                  <span className="text-primary font-bold tracking-widest uppercase text-[10px] md:text-sm mb-2 md:mb-4 block">
                     The Voice of Distinction
                   </span>
-                  <h2 className="font-headline text-4xl md:text-5xl italic leading-tight mb-6">
+                  <h2 className="font-headline text-lg sm:text-4xl md:text-5xl italic leading-tight mb-4 md:mb-6">
                     Mastering the Art of <br /><span className="text-primary not-italic font-bold">Live Engagement</span>
                   </h2>
-                  <p className="text-on-surface-variant text-base md:text-lg leading-relaxed mb-6">
+                  <p className="text-on-surface-variant text-xs sm:text-base md:text-lg leading-relaxed mb-4 md:mb-6">
                     With over a decade of experience on the mic, RJ Shivangi Gupta has mastered the delicate balance between high-energy entertainment and professional poise. Whether it's a high-stakes corporate summit or a fairy-tale destination wedding, she transforms events into unforgettable experiences.
                   </p>
-                  <p className="text-on-surface-variant text-base md:text-lg leading-relaxed italic border-l-4 border-primary pl-6 py-2 bg-surface-container-low/30 rounded-r-lg">
+                  <p className="text-on-surface-variant text-xs sm:text-base md:text-lg leading-relaxed italic border-l-4 border-primary pl-3 md:pl-6 py-1 md:py-2 bg-surface-container-low/30 rounded-r-lg">
                     "An event is not just a schedule; it's a narrative. My role is to ensure every chapter is told with charisma and clarity."
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-8 border-t border-outline-variant/20 pt-6">
+                <div className="grid grid-cols-2 gap-4 sm:gap-8 border-t border-outline-variant/20 pt-4 md:pt-6">
                   <div>
-                    <div className="text-3xl md:text-4xl font-headline text-primary mb-1 italic">500+</div>
-                    <div className="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Events Hosted</div>
+                    <div className="text-xl sm:text-3xl md:text-4xl font-headline text-primary mb-0.5 sm:mb-1 italic">500+</div>
+                    <div className="text-[10px] sm:text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Events Hosted</div>
                   </div>
                   <div>
-                    <div className="text-3xl md:text-4xl font-headline text-primary mb-1 italic">12+</div>
-                    <div className="text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Global Cities</div>
+                    <div className="text-xl sm:text-3xl md:text-4xl font-headline text-primary mb-0.5 sm:mb-1 italic">12+</div>
+                    <div className="text-[10px] sm:text-xs uppercase tracking-widest text-on-surface-variant font-semibold">Global Cities</div>
                   </div>
                 </div>
               </div>
@@ -388,53 +436,22 @@ function App() {
               <p className="font-label text-xs uppercase tracking-[0.2em] text-outline font-bold">Exclusive Hosting Services</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-              {/* Wedding Experience Card */}
-              <div className="group relative bg-surface-container-low p-10 h-[400px] flex flex-col justify-end overflow-hidden rounded-xl transition-all duration-500 hover:translate-y-[-8px] border border-outline-variant/10 shadow-lg">
-                <div className="absolute top-0 left-0 w-1 h-full bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500"></div>
-                <img
-                  className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-700"
-                  alt="Luxury wedding reception in grand ballroom"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmtsZDm-sI1GPVtRdVqh2bKOkh8QzuBndhr_NkXNZgprZOjQNb3JEAfKbfvMPTXgQx4OENLqCURlpELSOVn3vEO-dIacC_tZU1WuIS6wU_kOm7Yezv1Se2VbeEymm6wHqU8N6ChWiwAhDCwAxZAdnmriKw_7zJ4I5zcTgAC9XqDm0ZiNa43e8aCuAype6hsmQ60FrgE3_h3mTkXxdXAQbEvPG03apA3O3dESOMmdPiNh_NSJBBOKdxmAV5QbUO_R8aAkDIICAZVHVB"
-                />
-                <div className="relative z-10">
-                  <span className="material-symbols-outlined text-primary text-4xl mb-6 block">loyalty</span>
-                  <h3 className="font-serif text-3xl text-on-surface mb-4 italic">Bespoke Weddings</h3>
-                  <p className="text-secondary text-sm font-light leading-relaxed">Elevating luxury nuptials with a touch of poise and cultural depth.</p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
+              {services.map((service, index) => (
+                <div key={index} className="group relative bg-surface-container-low p-4 sm:p-6 md:p-10 h-[240px] sm:h-[320px] md:h-[400px] flex flex-col justify-end overflow-hidden rounded-xl transition-all duration-500 hover:translate-y-[-8px] border border-outline-variant/10 shadow-lg">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500"></div>
+                  <img
+                    className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-700"
+                    alt={service.title}
+                    src={service.bg}
+                  />
+                  <div className="relative z-10">
+                    <span className="material-symbols-outlined text-primary text-2xl md:text-4xl mb-2 md:mb-6 block">{service.icon}</span>
+                    <h3 className="font-serif text-base sm:text-2xl md:text-3xl text-on-surface mb-1 md:mb-4 italic">{service.title}</h3>
+                    <p className="text-secondary text-[10px] sm:text-xs md:text-sm font-light leading-relaxed">{service.description}</p>
+                  </div>
                 </div>
-              </div>
-
-              {/* Corporate Experience Card */}
-              <div className="group relative bg-surface-container-low p-10 h-[400px] flex flex-col justify-end overflow-hidden rounded-xl transition-all duration-500 hover:translate-y-[-8px] border border-outline-variant/10 shadow-lg">
-                <div className="absolute top-0 left-0 w-1 h-full bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500"></div>
-                <img
-                  className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-700"
-                  alt="Corporate gala executive stage"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCXEUIUn8dArGuBIaxTrE9Cl2St2dGdbLm07MWBfYndLj3WzAAhO-gRc08slBV12cupnzSY3SAQLfrJ1hOmaAzCIBfHUXCf8gG0OhENrrFQwr7nUgPssEzBWd1-jN8_QKRyLIpvlPGyiHKt0CMrlLpJ5PokbM5vC6qG4jXbGb5NqYLMgL-IqjS3qw6njM3un_csVIeYpqPSHYPnECm5Wbknw3KMQHyBK_3YXqQMkHso2_EW1vlYa4p69Ir0EJVBaosYZYNRGJtDp7l"
-                />
-                <div className="relative z-10">
-                  <span className="material-symbols-outlined text-primary text-4xl mb-6 block">business_center</span>
-                  <h3 className="font-serif text-3xl text-on-surface mb-4 italic">Corporate Galas</h3>
-                  <p className="text-secondary text-sm font-light leading-relaxed">Delivering brand narratives with absolute professional authority.</p>
-                </div>
-              </div>
-
-              {/* Celebrity Experience Card */}
-              <div className="group relative bg-surface-container-low p-10 h-[400px] flex flex-col justify-end overflow-hidden rounded-xl transition-all duration-500 hover:translate-y-[-8px] border border-outline-variant/10 shadow-lg">
-                <div className="absolute top-0 left-0 w-1 h-full bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500"></div>
-                <img
-                  className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-700"
-                  alt="Red carpet premier event barriers"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi7z3MJftKwiXBbanIhynVTEQxP6E-G6PMlFzX1lGV2VPPXA2Y6AN7kIGMwjYRguwX4wFFN2YV9SOtrqg4FbL35FO4d4urPeMbB8XGuHmO8PxaO97KhQVP9nDoA8iiH9ZVJ1OPvO61rfRMRxKMfv9Z4xc3F7jVsO4bX3VNfqcqfUN_g2fjL3cq3N0y966l6_l4hFD7xHGZtNh0BBopL1WdBd-nJYNggxAoaHWHGW-ZZokmZnfiJYtjm0wExrwCO-hCA26C-_W6XJQ1"
-                />
-                <div className="relative z-10">
-                  <span className="material-symbols-outlined text-primary text-4xl mb-6 block">stars</span>
-                  <h3 className="font-serif text-3xl text-on-surface mb-4 italic">Celebrity Launches</h3>
-                  <p className="text-secondary text-sm font-light leading-relaxed">High-energy hosting for red carpet premieres and luxury launches.</p>
-                </div>
-              </div>
-
+              ))}
             </div>
           </div>
         </section>
