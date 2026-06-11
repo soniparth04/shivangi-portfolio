@@ -5,6 +5,7 @@ function Admin() {
   const [media, setMedia] = useState([]);
   const [title, setTitle] = useState('');
   const [type, setType] = useState('photo');
+  const [tag, setTag] = useState('None');
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -67,8 +68,8 @@ function Admin() {
     }
 
     const sizeInMB = selectedFile.size / (1024 * 1024);
-    
-    if ((type === 'photo' || type === 'about_image') && sizeInMB > 50) {
+
+    if (type !== 'video' && sizeInMB > 50) {
       toast.error('Image size must be no more than 50 MB');
       e.target.value = '';
       setFile(null);
@@ -88,7 +89,7 @@ function Admin() {
 
     setFile(selectedFile);
     setFileSizeStr(sizeInMB.toFixed(2) + ' MB');
-    
+
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
     }
@@ -118,13 +119,14 @@ function Admin() {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('type', type);
+    formData.append('tag', tag);
     formData.append('file', file);
 
     try {
       await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', '/api/media');
-        
+
         xhr.upload.onprogress = (event) => {
           if (event.lengthComputable) {
             const percentComplete = Math.round((event.loaded / event.total) * 100);
@@ -146,7 +148,8 @@ function Admin() {
 
       toast.success('Media uploaded successfully');
       setTitle('');
-      if (type === 'about_image') {
+      setTag('None');
+      if (type !== 'photo' && type !== 'video') {
         setType('photo');
       }
       clearSelection();
@@ -161,7 +164,7 @@ function Admin() {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this item?')) return;
-    
+
     try {
       const res = await fetch(`/api/media/${id}`, {
         method: 'DELETE',
@@ -179,7 +182,7 @@ function Admin() {
 
   const handleDeleteInquiry = async (id) => {
     if (!window.confirm('Are you sure you want to delete this booking inquiry?')) return;
-    
+
     try {
       const res = await fetch(`/api/inquiries/${id}`, {
         method: 'DELETE',
@@ -238,30 +241,30 @@ function Admin() {
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
               <label className="text-xs uppercase tracking-widest font-bold text-outline">Username</label>
-              <input 
+              <input
                 required
                 value={loginUser}
                 onChange={(e) => setLoginUser(e.target.value)}
-                className="w-full bg-[#201f1f] border border-outline-variant/10 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl p-4 outline-none" 
+                className="w-full bg-[#201f1f] border border-outline-variant/10 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl p-4 outline-none"
               />
             </div>
             <div className="space-y-2">
               <label className="text-xs uppercase tracking-widest font-bold text-outline">Password</label>
-              <input 
+              <input
                 type="password"
                 required
                 value={loginPass}
                 onChange={(e) => setLoginPass(e.target.value)}
-                className="w-full bg-[#201f1f] border border-outline-variant/10 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl p-4 outline-none" 
+                className="w-full bg-[#201f1f] border border-outline-variant/10 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl p-4 outline-none"
               />
             </div>
-            <button 
+            <button
               type="submit"
               className="w-full bg-[#d4af37] text-[#131313] py-4 rounded-xl font-bold hover:bg-[#f2ca50] transition-all"
             >
               Login
             </button>
-            <button 
+            <button
               type="button"
               onClick={() => window.location.href = '/'}
               className="w-full text-center text-sm uppercase tracking-widest text-outline hover:text-[#d4af37] transition-colors"
@@ -281,13 +284,13 @@ function Admin() {
         <header className="flex justify-between items-center mb-12">
           <h1 className="text-4xl font-serif italic text-[#d4af37]">Admin Panel</h1>
           <div className="flex gap-4">
-            <button 
+            <button
               onClick={handleLogout}
               className="text-sm uppercase tracking-widest text-outline border border-outline-variant/20 px-4 py-2 rounded-full hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/30 transition-all"
             >
               Logout
             </button>
-            <button 
+            <button
               onClick={() => window.location.href = '/'}
               className="text-sm uppercase tracking-widest text-outline border border-outline-variant/20 px-4 py-2 rounded-full hover:bg-primary/10 transition-all"
             >
@@ -298,23 +301,21 @@ function Admin() {
 
         {/* Tab Selector */}
         <div className="flex gap-4 mb-10 border-b border-outline-variant/10 pb-4">
-          <button 
+          <button
             onClick={() => setActiveTab('media')}
-            className={`px-6 py-2.5 rounded-full font-serif text-sm uppercase tracking-widest font-semibold transition-all duration-300 ${
-              activeTab === 'media' 
-                ? 'bg-[#d4af37] text-[#131313] shadow-md shadow-[#d4af37]/15' 
+            className={`px-6 py-2.5 rounded-full font-serif text-sm uppercase tracking-widest font-semibold transition-all duration-300 ${activeTab === 'media'
+                ? 'bg-[#d4af37] text-[#131313] shadow-md shadow-[#d4af37]/15'
                 : 'text-outline hover:text-[#d4af37] hover:bg-[#d4af37]/5'
-            }`}
+              }`}
           >
             Media Manager
           </button>
-          <button 
+          <button
             onClick={() => setActiveTab('inquiries')}
-            className={`px-6 py-2.5 rounded-full font-serif text-sm uppercase tracking-widest font-semibold transition-all duration-300 flex items-center gap-2 ${
-              activeTab === 'inquiries' 
-                ? 'bg-[#d4af37] text-[#131313] shadow-md shadow-[#d4af37]/15' 
+            className={`px-6 py-2.5 rounded-full font-serif text-sm uppercase tracking-widest font-semibold transition-all duration-300 flex items-center gap-2 ${activeTab === 'inquiries'
+                ? 'bg-[#d4af37] text-[#131313] shadow-md shadow-[#d4af37]/15'
                 : 'text-outline hover:text-[#d4af37] hover:bg-[#d4af37]/5'
-            }`}
+              }`}
           >
             Booking Inquiries
             {inquiries.length > 0 && (
@@ -330,46 +331,87 @@ function Admin() {
             <section className="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/10 shadow-lg mb-12">
               <h2 className="text-2xl font-serif italic mb-6">Upload New Media</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-3 gap-6">
                   <div className="space-y-2">
                     <label className="text-xs uppercase tracking-widest font-bold">Title/Alt Text</label>
-                    <input 
+                    <input
                       required
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="w-full bg-[#201f1f] border border-outline-variant/10 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl p-4 outline-none" 
-                      placeholder="Enter title" 
+                      className="w-full bg-[#201f1f] border border-outline-variant/10 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl p-4 outline-none"
+                      placeholder="Enter title"
                     />
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs uppercase tracking-widest font-bold">Media Type</label>
-                    <select 
-                      value={type} 
+                    <select
+                      value={type}
                       onChange={handleTypeChange}
                       className="w-full bg-[#201f1f] border border-outline-variant/10 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl p-4 outline-none text-[#d4af37] font-semibold"
                     >
                       <option value="photo">Gallery Photo</option>
                       <option value="video">Gallery Video</option>
+                      {!media.some(item => item.type === 'cover_image') && (
+                        <option value="cover_image">Home Cover Image</option>
+                      )}
                       {!media.some(item => item.type === 'about_image') && (
                         <option value="about_image">About Section Main Image</option>
                       )}
+                      {!media.some(item => item.type === 'sangeet_bg') && (
+                        <option value="sangeet_bg">Sangeet Card Background</option>
+                      )}
+                      {!media.some(item => item.type === 'haldi_bg') && (
+                        <option value="haldi_bg">Haldi Card Background</option>
+                      )}
+                      {!media.some(item => item.type === 'kids_bg') && (
+                        <option value="kids_bg">Kids Celebration Card Background</option>
+                      )}
+                      {!media.some(item => item.type === 'corporate_bg') && (
+                        <option value="corporate_bg">Corporate Events Card Background</option>
+                      )}
+                      {!media.some(item => item.type === 'cultural_bg') && (
+                        <option value="cultural_bg">Cultural Gigs Card Background</option>
+                      )}
+                      {!media.some(item => item.type === 'fashion_bg') && (
+                        <option value="fashion_bg">Fashion Fun Card Background</option>
+                      )}
                     </select>
                   </div>
+                  {type === 'photo' || type === 'video' ? (
+                    <div className="space-y-2">
+                      <label className="text-xs uppercase tracking-widest font-bold">Category Tag</label>
+                      <select
+                        value={tag}
+                        onChange={(e) => setTag(e.target.value)}
+                        className="w-full bg-[#201f1f] border border-outline-variant/10 focus:border-[#d4af37] focus:ring-1 focus:ring-[#d4af37] rounded-xl p-4 outline-none text-[#d4af37] font-semibold"
+                      >
+                        <option value="None">None</option>
+                        <option value="Sangeet Night">Sangeet Night</option>
+                        <option value="Haldi Carnival">Haldi Carnival</option>
+                        <option value="Kids Celebration">Kids Celebration</option>
+                        <option value="Corporate Events">Corporate Events</option>
+                        <option value="Cultural Gigs">Cultural Gigs</option>
+                        <option value="Fashion Fun">Fashion Fun</option>
+                      </select>
+                    </div>
+                  ) : (
+                    <div className="hidden md:block"></div>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <label className="text-xs uppercase tracking-widest font-bold">Select File</label>
-                  <input 
+                  <input
                     key={inputKey} // Resets input element on change or clear
                     type="file"
                     required
                     accept={type === 'video' ? 'video/*' : 'image/*'}
                     onChange={handleFileChange}
-                    className="w-full bg-[#201f1f] border border-outline-variant/10 rounded-xl p-4 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#d4af37] file:text-[#131313] hover:file:bg-[#f2ca50] cursor-pointer" 
+                    className="w-full bg-[#201f1f] border border-outline-variant/10 rounded-xl p-4 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#d4af37] file:text-[#131313] hover:file:bg-[#f2ca50] cursor-pointer"
                   />
                 </div>
                 {previewUrl && (
                   <div className="relative space-y-2 p-4 border border-outline-variant/10 rounded-xl bg-[#1a1a1a]">
-                    <button 
+                    <button
                       type="button"
                       onClick={clearSelection}
                       className="absolute top-4 right-4 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white p-1.5 rounded-full transition-colors flex items-center justify-center z-10 border border-red-500/30 hover:border-red-500"
@@ -386,14 +428,14 @@ function Admin() {
                   </div>
                 )}
                 <div className="flex flex-col gap-3">
-                  <button 
+                  <button
                     type="submit"
                     disabled={loading}
                     className="relative overflow-hidden bg-[#d4af37] text-[#131313] py-4 px-8 rounded-xl font-bold disabled:opacity-70 hover:bg-[#f2ca50] transition-all"
                   >
                     <div className="relative z-10">{loading ? `Uploading... ${uploadProgress}%` : 'Upload Media'}</div>
                     {loading && (
-                      <div 
+                      <div
                         className="absolute top-0 left-0 h-full bg-[#f2ca50] transition-all duration-300"
                         style={{ width: `${uploadProgress}%` }}
                       ></div>
@@ -420,10 +462,18 @@ function Admin() {
                     )}
                     <div className="p-4 flex justify-between items-center bg-[#131313]">
                       <p className="text-sm font-semibold truncate flex-1 mr-4" title={item.title}>
-                        {item.title} 
-                        {item.type === 'about_image' && <span className="ml-2 text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded uppercase">Main Section</span>}
+                        {item.title}
+                        {item.type !== 'photo' && item.type !== 'video' ? (
+                          <span className="ml-2 text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded uppercase font-bold">
+                            {item.type.replace('_bg', ' Bg').replace('_image', ' Image').replace('_', ' ')}
+                          </span>
+                        ) : (
+                          item.tag && item.tag !== 'None' && (
+                            <span className="ml-2 text-[10px] bg-yellow-500/20 text-yellow-500 px-2 py-0.5 rounded uppercase font-bold">{item.tag}</span>
+                          )
+                        )}
                       </p>
-                      <button 
+                      <button
                         onClick={() => handleDelete(item._id)}
                         className="text-red-500 hover:text-red-400 bg-red-500/10 p-2 rounded-lg transition-colors"
                       >
@@ -440,7 +490,7 @@ function Admin() {
           <section>
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-serif italic">Booking Inquiries ({inquiries.length})</h2>
-              <button 
+              <button
                 onClick={fetchInquiries}
                 className="text-xs uppercase tracking-widest text-[#d4af37] border border-[#d4af37]/20 px-3 py-1.5 rounded-full hover:bg-[#d4af37]/10 transition-all flex items-center gap-1.5"
               >
@@ -451,8 +501,8 @@ function Admin() {
 
             <div className="space-y-6">
               {inquiries.map((inquiry) => (
-                <div 
-                  key={inquiry._id} 
+                <div
+                  key={inquiry._id}
                   className="bg-surface-container-low p-6 md:p-8 rounded-2xl border border-outline-variant/10 shadow-lg relative group transition-all hover:border-[#d4af37]/30"
                 >
                   <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
@@ -475,14 +525,14 @@ function Admin() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <a 
+                      <a
                         href={`mailto:${inquiry.email}?subject=Re: booking inquiry for ${inquiry.eventType}`}
                         className="text-xs uppercase tracking-widest bg-[#d4af37]/10 text-[#d4af37] border border-[#d4af37]/20 px-4 py-2 rounded-full hover:bg-[#d4af37] hover:text-[#131313] transition-all flex items-center gap-1.5"
                       >
                         <span className="material-symbols-outlined text-sm">mail</span>
                         Reply via Email
                       </a>
-                      <button 
+                      <button
                         onClick={() => handleDeleteInquiry(inquiry._id)}
                         className="text-red-500 hover:text-red-400 bg-red-500/10 p-2.5 rounded-full border border-red-500/20 hover:border-red-500/40 transition-all flex items-center justify-center"
                         title="Delete inquiry"
@@ -511,7 +561,7 @@ function Admin() {
                           <span>Phone: <a href={`tel:${inquiry.phone}`} className="text-[#d4af37] hover:underline font-semibold">{inquiry.phone}</a></span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <a 
+                          <a
                             href={`https://wa.me/${inquiry.phone.replace(/[^0-9]/g, '')}`}
                             target="_blank"
                             rel="noreferrer"

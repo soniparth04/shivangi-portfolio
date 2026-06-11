@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
   <link rel="apple-touch-icon" sizes="192x192" href="/favicon.png" />
@@ -288,6 +288,45 @@
       }
     }
   </style>
+  <script>
+    // Disable right click / context menu
+    document.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+    });
+
+    // Disable copy and cut events
+    document.addEventListener('copy', function (e) {
+      e.preventDefault();
+    });
+    document.addEventListener('cut', function (e) {
+      e.preventDefault();
+    });
+
+    // Disable keyboard shortcuts for zoom
+    document.addEventListener('keydown', function (e) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '-' || e.key === '+' || e.key === '0')) {
+        e.preventDefault();
+      }
+    });
+
+    // Disable mouse wheel zoom
+    document.addEventListener('wheel', function (e) {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    // Disable double-tap zoom
+    let lastTouchTime = 0;
+    document.addEventListener('touchstart', function (e) {
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTouchTime;
+      if (tapLength < 500 && tapLength > 0) {
+        e.preventDefault();
+      }
+      lastTouchTime = currentTime;
+    }, { passive: false });
+  </script>
 </head>
 
 <body class="bg-[#131313] text-on-surface selection:bg-primary selection:text-on-primary">

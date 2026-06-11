@@ -54,7 +54,7 @@ app.get('/api/media', async (req, res) => {
 // Upload media
 app.post('/api/media', upload.single('file'), async (req, res) => {
   try {
-    const { title, type } = req.body;
+    const { title, type, tag } = req.body;
     
     if (!req.file) {
        return res.status(400).json({ error: 'No file uploaded' });
@@ -64,6 +64,7 @@ app.post('/api/media', upload.single('file'), async (req, res) => {
       title,
       type,
       url: req.file.path,
+      tag: tag || 'None',
     });
 
     await newMedia.save();
